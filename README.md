@@ -1,5 +1,52 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 환경 변수 설정
+
+프로젝트 루트에 `.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
+
+```bash
+# Google Analytics
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+### Google Analytics 설정
+
+1. [Google Analytics](https://analytics.google.com/)에 접속
+2. 새 속성 만들기 또는 기존 속성 선택
+3. 데이터 스트림 > 웹 추가
+4. 측정 ID (G-XXXXXXXXXX 형식) 복사
+5. `.env.local` 파일의 `NEXT_PUBLIC_GA_ID`에 붙여넣기
+
+#### GA 이벤트 추적 사용법
+
+게임 내에서 이벤트를 추적하려면 `src/utils/gtag.ts`의 함수를 사용하세요:
+
+```typescript
+import { gameEvents } from "@/utils/gtag";
+
+// 게임 시작
+gameEvents.startGame(nickname);
+
+// 정답 체크
+gameEvents.correctAnswer(word, combo);
+
+// 오답
+gameEvents.wrongAnswer(word);
+
+// 패스
+gameEvents.passWord(word);
+
+// 게임 종료
+gameEvents.endGame(score, correctAnswers, maxCombo);
+
+// 랭킹 조회
+gameEvents.viewRanking();
+```
+
 ## Getting Started
 
 First, run the development server:
