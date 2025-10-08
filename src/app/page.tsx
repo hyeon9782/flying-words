@@ -5,7 +5,7 @@ import { GameCanvas } from "../components/game-canvas";
 import { NicknameInput } from "../components/nickname-input";
 import { Leaderboard } from "../components/leader-board";
 import { getRandomWord, type WordData } from "../data/words";
-import { saveScore } from "../api/leader-board";
+import { saveScore, getPlayerRank } from "../api/leader-board";
 import type { GameState } from "../types";
 
 function Home() {
@@ -15,16 +15,32 @@ function Home() {
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(180);
   const [targetWordData, setTargetWordData] = useState<WordData | null>(null);
   const [message, setMessage] = useState("");
   const [input, setInput] = useState("");
+  const [playerRank, setPlayerRank] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const isComposingRef = useRef(false); // 한글 조합 중인지 체크
+  const hasGameEndedRef = useRef(false); // 게임 종료 중복 방지
+
+  // 최신 상태값을 참조하기 위한 ref
+  const scoreRef = useRef(score);
+  const correctAnswersRef = useRef(correctAnswers);
+  const maxComboRef = useRef(maxCombo);
+  const nicknameRef = useRef(nickname);
 
   const targetWord = targetWordData?.word || "";
   const targetTheme = targetWordData?.theme || "";
   const isPlaying = gameState === "playing";
+
+  // ref 업데이트
+  useEffect(() => {
+    scoreRef.current = score;
+    correctAnswersRef.current = correctAnswers;
+    maxComboRef.current = maxCombo;
+    nicknameRef.current = nickname;
+  }, [score, correctAnswers, maxCombo, nickname]);
 
   // 게임 시작 시 input에 포커스
   useEffect(() => {
@@ -128,10 +144,12 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(300);
+    setTimeLeft(180);
     setMessage("");
     setInput("");
+    setPlayerRank(null); // 순위 리셋
     setTargetWordData(getRandomWord());
+    hasGameEndedRef.current = false; // 게임 종료 플래그 리셋
   }
 
   function handlePass() {
@@ -151,17 +169,32 @@ function Home() {
   }
 
   async function handleGameOver() {
+    // 중복 호출 방지
+    if (hasGameEndedRef.current) return;
+    hasGameEndedRef.current = true;
+
     setGameState("gameOver");
     setMessage("시간 종료! 게임이 끝났습니다 ⏰");
 
-    // 점수 저장 (비동기)
+    // ref를 통해 최신 상태값으로 점수 저장
     try {
       await saveScore({
-        nickname,
-        score,
-        correctAnswers,
-        maxCombo,
+        nickname: nicknameRef.current,
+        score: scoreRef.current,
+        correctAnswers: correctAnswersRef.current,
+        maxCombo: maxComboRef.current,
       });
+      console.log("✅ 점수 저장 완료:", {
+        nickname: nicknameRef.current,
+        score: scoreRef.current,
+        correctAnswers: correctAnswersRef.current,
+        maxCombo: maxComboRef.current,
+      });
+
+      // 순위 조회
+      const rank = await getPlayerRank(nicknameRef.current);
+      setPlayerRank(rank);
+      console.log("🏆 플레이어 순위:", rank);
     } catch (error) {
       console.error("Failed to save score:", error);
       // 에러가 나도 게임은 계속 진행
@@ -174,10 +207,12 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(300);
+    setTimeLeft(180);
     setMessage("");
     setInput("");
+    setPlayerRank(null); // 순위 리셋
     setTargetWordData(getRandomWord());
+    hasGameEndedRef.current = false; // 게임 종료 플래그 리셋
   }
 
   function handleBackToNickname() {
@@ -340,10 +375,22 @@ function Home() {
               게임 종료!
             </h1>
 
-            {/* 플레이어 정보 */}
+            {/* 플레이어 정보 & 순위 */}
             <div className="text-center mb-6">
               <div className="text-white/70 text-lg mb-2">플레이어</div>
-              <div className="text-blue-300 text-3xl font-bold">{nickname}</div>
+              <div className="text-blue-300 text-3xl font-bold mb-3">
+                {nickname}
+              </div>
+
+              {/* 순위 표시 */}
+              {playerRank !== null && (
+                <div className="inline-block bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-400/50 rounded-xl px-6 py-3">
+                  <div className="text-white/70 text-sm mb-1">전체 순위</div>
+                  <div className="text-yellow-300 text-4xl font-bold">
+                    {playerRank}위
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 결과 통계 */}
