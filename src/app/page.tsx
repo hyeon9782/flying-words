@@ -160,7 +160,7 @@ function Home() {
     setInput("");
     const nextWordData = getRandomWord(targetWord);
     setTargetWordData(nextWordData);
-    setMessage("패스! 다음 문제입니다 ⏭️");
+    setMessage(`패스! 정답은 ${targetWord}입니다!`);
 
     setTimeout(() => {
       setMessage("");
@@ -246,7 +246,7 @@ function Home() {
           <div className="flex flex-col gap-2">
             {/* 타이머 */}
             <div
-              className={`bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 transition-colors ${
+              className={`bg-black/50 backdrop-blur-sm rounded-lg px-2 py-1 border-2 transition-colors ${
                 timeLeft <= 30
                   ? "border-red-500 animate-pulse"
                   : timeLeft <= 60
@@ -270,26 +270,28 @@ function Home() {
             </div>
 
             {/* 테마 & 글자 수 힌트 */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-green-500">
-              <div className="text-white text-sm font-medium mb-1">힌트</div>
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-2 py-1 border-2 border-green-500">
+              <div className="flex justify-between items-center">
+                <div className="text-white text-sm font-medium">힌트</div>
+                <div className="text-yellow-400 text-sm font-bold">
+                  {targetWord.length}글자
+                </div>
+              </div>
               <div className="text-green-400 text-2xl font-bold">
                 {targetTheme}
-              </div>
-              <div className="text-yellow-400 text-lg font-bold mt-1">
-                {targetWord.length}글자
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
             {/* 점수 */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-purple-500">
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg min-w-[100px] px-2 py-1 border-2 border-purple-500">
               <div className="text-white text-sm font-medium mb-1">점수</div>
               <div className="text-white text-3xl font-bold">{score}</div>
             </div>
 
             {/* 콤보 */}
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-yellow-500">
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-2 py-1 border-2 border-yellow-500">
               <div className="text-white text-sm font-medium mb-1">콤보</div>
               <div className="text-white text-3xl font-bold">×{combo}</div>
             </div>
@@ -298,7 +300,7 @@ function Home() {
             <button
               onClick={handlePass}
               disabled={!isPlaying}
-              className="pointer-events-auto bg-orange-500/80 hover:bg-orange-600 disabled:bg-gray-500/50 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 border-2 border-orange-400"
+              className="pointer-events-auto bg-orange-500/80 hover:bg-orange-600 disabled:bg-gray-500/50 disabled:cursor-not-allowed text-white font-bold px-2 py-1 rounded-lg transition-all duration-200 transform hover:scale-105 border-2 border-orange-400"
             >
               <div className="text-sm mb-1">패스</div>
               <div className="text-2xl">⏭️</div>
@@ -314,9 +316,9 @@ function Home() {
                 message.includes("정답")
                   ? "bg-green-500/90 border-green-300"
                   : "bg-red-500/90 border-red-300"
-              } backdrop-blur-md rounded-2xl px-12 py-6 border-2 shadow-2xl animate-bounce`}
+              } backdrop-blur-md rounded-2xl px-3 py-2 border-2 shadow-2xl animate-bounce`}
             >
-              <div className="text-white text-4xl font-bold text-center whitespace-nowrap">
+              <div className="text-white text-2xl font-bold text-center whitespace-nowrap">
                 {message}
               </div>
             </div>
