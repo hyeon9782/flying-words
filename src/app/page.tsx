@@ -144,7 +144,7 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(999);
+    setTimeLeft(180);
     setMessage("");
     setInput("");
     setPlayerRank(null); // 순위 리셋
@@ -207,7 +207,7 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(999);
+    setTimeLeft(180);
     setMessage("");
     setInput("");
     setPlayerRank(null); // 순위 리셋

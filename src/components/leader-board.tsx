@@ -60,11 +60,11 @@ export function Leaderboard({
 
   return (
     <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-gradient-to-br from-purple-900/90 to-blue-900/90 backdrop-blur-md rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] border-2 border-white/20 shadow-2xl overflow-hidden flex flex-col">
+      <div className="bg-gradient-to-br from-purple-900/90 to-blue-900/90 backdrop-blur-md rounded-3xl p-4 max-w-4xl w-full max-h-[90vh] border-2 border-white/20 shadow-2xl overflow-hidden flex flex-col">
         {/* 헤더 */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-            🏆 리더보드
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            🏆 랭킹
           </h2>
           <button
             onClick={onClose}
@@ -124,11 +124,11 @@ export function Leaderboard({
                       isCurrentPlayer
                         ? "bg-gradient-to-r from-green-500/30 to-blue-500/30 border-2 border-green-400"
                         : "bg-white/5 hover:bg-white/10 border border-white/10"
-                    } backdrop-blur-sm rounded-xl p-4 transition-all duration-200`}
+                    } backdrop-blur-sm rounded-xl p-1 transition-all duration-200`}
                   >
                     <div className="flex items-center gap-4">
                       {/* 순위 */}
-                      <div className="flex-shrink-0 w-12 text-center">
+                      <div className="flex-shrink-0 w-8 text-center">
                         <div className="text-2xl font-bold text-white">
                           {getMedalEmoji(entry.rank)}
                           {!getMedalEmoji(entry.rank) && (
