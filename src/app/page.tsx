@@ -110,7 +110,7 @@ function Home() {
     } else {
       // 오답
       setCombo(0);
-      setMessage("틀렸습니다! 다시 시도하세요 ❌");
+      setMessage("오답입니다! ❌");
       setInput("");
 
       // 포커스 유지
@@ -144,7 +144,7 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(180);
+    setTimeLeft(999);
     setMessage("");
     setInput("");
     setPlayerRank(null); // 순위 리셋
@@ -207,7 +207,7 @@ function Home() {
     setCombo(0);
     setMaxCombo(0);
     setCorrectAnswers(0);
-    setTimeLeft(180);
+    setTimeLeft(999);
     setMessage("");
     setInput("");
     setPlayerRank(null); // 순위 리셋
@@ -242,64 +242,68 @@ function Home() {
       {/* UI 오버레이 */}
       <div className="absolute inset-0 pointer-events-none">
         {/* 상단 HUD */}
-        <div className="flex justify-between items-start p-6 gap-4">
-          {/* 타이머 */}
-          <div
-            className={`bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 transition-colors ${
-              timeLeft <= 30
-                ? "border-red-500 animate-pulse"
-                : timeLeft <= 60
-                ? "border-yellow-500"
-                : "border-blue-500"
-            }`}
-          >
-            <div className="text-white text-sm font-medium mb-1">시간</div>
+        <div className="flex justify-between items-start p-2 gap-4">
+          <div className="flex flex-col gap-2">
+            {/* 타이머 */}
             <div
-              className={`text-3xl font-bold ${
+              className={`bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 transition-colors ${
                 timeLeft <= 30
-                  ? "text-red-400"
+                  ? "border-red-500 animate-pulse"
                   : timeLeft <= 60
-                  ? "text-yellow-400"
-                  : "text-white"
+                  ? "border-yellow-500"
+                  : "border-blue-500"
               }`}
             >
-              {Math.floor(timeLeft / 60)}:
-              {String(timeLeft % 60).padStart(2, "0")}
+              <div className="text-white text-sm font-medium mb-1">시간</div>
+              <div
+                className={`text-3xl font-bold ${
+                  timeLeft <= 30
+                    ? "text-red-400"
+                    : timeLeft <= 60
+                    ? "text-yellow-400"
+                    : "text-white"
+                }`}
+              >
+                {Math.floor(timeLeft / 60)}:
+                {String(timeLeft % 60).padStart(2, "0")}
+              </div>
+            </div>
+
+            {/* 테마 & 글자 수 힌트 */}
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-green-500">
+              <div className="text-white text-sm font-medium mb-1">힌트</div>
+              <div className="text-green-400 text-2xl font-bold">
+                {targetTheme}
+              </div>
+              <div className="text-yellow-400 text-lg font-bold mt-1">
+                {targetWord.length}글자
+              </div>
             </div>
           </div>
 
-          {/* 테마 & 글자 수 힌트 */}
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-green-500">
-            <div className="text-white text-sm font-medium mb-1">힌트</div>
-            <div className="text-green-400 text-2xl font-bold">
-              {targetTheme}
+          <div className="flex flex-col gap-2">
+            {/* 점수 */}
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-purple-500">
+              <div className="text-white text-sm font-medium mb-1">점수</div>
+              <div className="text-white text-3xl font-bold">{score}</div>
             </div>
-            <div className="text-yellow-400 text-lg font-bold mt-1">
-              {targetWord.length}글자
+
+            {/* 콤보 */}
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-yellow-500">
+              <div className="text-white text-sm font-medium mb-1">콤보</div>
+              <div className="text-white text-3xl font-bold">×{combo}</div>
             </div>
-          </div>
 
-          {/* 점수 */}
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-purple-500">
-            <div className="text-white text-sm font-medium mb-1">점수</div>
-            <div className="text-white text-3xl font-bold">{score}</div>
+            {/* 패스 버튼 */}
+            <button
+              onClick={handlePass}
+              disabled={!isPlaying}
+              className="pointer-events-auto bg-orange-500/80 hover:bg-orange-600 disabled:bg-gray-500/50 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 border-2 border-orange-400"
+            >
+              <div className="text-sm mb-1">패스</div>
+              <div className="text-2xl">⏭️</div>
+            </button>
           </div>
-
-          {/* 콤보 */}
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-3 border-2 border-yellow-500">
-            <div className="text-white text-sm font-medium mb-1">콤보</div>
-            <div className="text-white text-3xl font-bold">×{combo}</div>
-          </div>
-
-          {/* 패스 버튼 */}
-          <button
-            onClick={handlePass}
-            disabled={!isPlaying}
-            className="pointer-events-auto bg-orange-500/80 hover:bg-orange-600 disabled:bg-gray-500/50 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 border-2 border-orange-400"
-          >
-            <div className="text-sm mb-1">패스</div>
-            <div className="text-2xl">⏭️</div>
-          </button>
         </div>
 
         {/* 정답/오답 메시지 */}
@@ -312,7 +316,7 @@ function Home() {
                   : "bg-red-500/90 border-red-300"
               } backdrop-blur-md rounded-2xl px-12 py-6 border-2 shadow-2xl animate-bounce`}
             >
-              <div className="text-white text-4xl font-bold text-center">
+              <div className="text-white text-4xl font-bold text-center whitespace-nowrap">
                 {message}
               </div>
             </div>
@@ -323,12 +327,11 @@ function Home() {
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <div className="max-w-2xl mx-auto">
             {/* 입력 표시 */}
-            <div className="bg-black/70 backdrop-blur-md rounded-2xl px-8 py-6 border-2 border-green-500 shadow-2xl pointer-events-auto">
+            <div className="bg-black/70 backdrop-blur-md rounded-2xl px-4 py-3 border-2 border-green-500 shadow-2xl pointer-events-auto">
               <div className="text-white/70 text-sm font-medium mb-3">
                 날아다니는 글자로 단어를 맞춰보세요!
               </div>
-              <div className="relative">
-                {/* 실제 input 요소 (숨김) */}
+              <div className="relative flex items-center gap-2">
                 <input
                   ref={inputRef}
                   type="text"
@@ -337,22 +340,17 @@ function Home() {
                   onKeyDown={handleKeyDown}
                   onCompositionStart={handleCompositionStart}
                   onCompositionEnd={handleCompositionEnd}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-default"
+                  className="w-full h-[44px] text-xl font-bold"
+                  placeholder="여기에 입력하세요..."
                   autoComplete="off"
                   disabled={!isPlaying}
                 />
-                {/* 표시용 div */}
-                <div
-                  className="text-white text-4xl font-bold min-h-[60px] flex items-center cursor-text"
-                  onClick={() => inputRef.current?.focus()}
+                <button
+                  className="text-white text-lg font-bold px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 whitespace-nowrap"
+                  onClick={() => handleSubmit(input)}
                 >
-                  {input || (
-                    <span className="text-white/30">여기에 입력하세요...</span>
-                  )}
-                </div>
-              </div>
-              <div className="text-white/50 text-sm mt-4 text-center">
-                Enter: 제출 | Backspace: 삭제
+                  제출
+                </button>
               </div>
             </div>
           </div>

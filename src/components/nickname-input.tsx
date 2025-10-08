@@ -54,11 +54,11 @@ export function NicknameInput({ onStart, onViewRanking }: NicknameInputProps) {
 
   return (
     <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center">
-      <div className="bg-gradient-to-br from-blue-900/90 to-purple-900/90 backdrop-blur-md rounded-3xl p-12 max-w-2xl border-2 border-white/20 shadow-2xl">
-        <h1 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-          한글 플라이
+      <div className="bg-gradient-to-br from-blue-900/90 to-purple-900/90 backdrop-blur-md rounded-3xl p-4 max-w-2xl border-2 border-white/20 shadow-2xl">
+        <h1 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          날아라 한글!
         </h1>
-        <p className="text-white/90 text-xl mb-8 text-center leading-relaxed">
+        <p className="text-white/90 text-lg mb-8 text-center leading-relaxed">
           날아다니는 자음과 모음을 조합해서
           <br />
           숨겨진 단어를 맞춰보세요!
@@ -82,7 +82,7 @@ export function NicknameInput({ onStart, onViewRanking }: NicknameInputProps) {
               ⏭️ 어려우면 패스 버튼으로 다음 문제로!
             </p>
             <p className="text-white/70 text-sm">
-              ⏰ 제한 시간 5분 안에 최대한 많이 맞춰보세요!
+              ⏰ 제한 시간 3분 안에 최대한 많이 맞춰보세요!
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export function NicknameInput({ onStart, onViewRanking }: NicknameInputProps) {
           <div className="flex gap-4 pt-4">
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-xl px-8 py-4 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105"
+              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105"
             >
               게임 시작 🎮
             </button>
